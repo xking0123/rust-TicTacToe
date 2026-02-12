@@ -35,7 +35,7 @@ fn main() {
             // }
 
             //updating de board
-            //CheckWin();
+            CheckWin(&board, player);
             //CheckDraw();
             break;
         }
@@ -63,12 +63,12 @@ fn ResetGame() {
     let mut response = String::new();
     io::stdin().read_line(&mut response).expect("failureeeee");
 
-    if (response == "Y") {
+    if (response == "Y" || response == "Y") {
         println!("good luck we're running it again");
         main();
-    } else if (response == "N") {
+    } else if (response == "N" || response == "N") {
         println!("okie... byeeeeee")
     } else {
-        println!("idk wtf u entered but um... byeeeeee")
+        println!("idk wtf u entered but um... bye bye")
     }
 }
