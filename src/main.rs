@@ -1,35 +1,23 @@
-//TIC TAC TOE AGAIN... YAAAAAAYYYY
-
 use std::io;
 use std::string;
 
 fn main() {
-    let board: &str = {
-        "1";
-        "2";
-        "3";
-        "4";
-        "5";
-        "6";
-        "7";
-        "8";
-        "9"
-    };
-    let player = 1;
+    let mut board = [' '; 9];
+    let mut player = 'X';
 
     clearscreen::clear().expect("failureeeee");
     println!("TIC... TAC... TOE... rust edition");
     println!("Player 1: X and Player 2: O");
 
-    while (true) {
-        if (player % 2 == 0) {
-            println!("player 2 turn");
-        } else {
-            println!("player 1 turn");
-        }
+    loop{
+        //drawing board
+        println!(" {} | {} | {} ", board[0], board[1], board[2]);
+        println!("-----------");
+        println!(" {} | {} | {} ", board[3], board[4], board[5]);
+        println!("-----------");
+        println!(" {} | {} | {} ", board[6], board[7], board[8]);
 
         //getting user input and validating
-        while (true) {
             println!("Pick spot 1-9 to make ya move ya goober: ");
             let mut input = String::new();
             io::stdin().read_line(&mut input).expect("failureeeee");
@@ -40,36 +28,33 @@ fn main() {
                 println!("u stupid... try again");
                 continue;
             }
-            // else if(board(player_choice) - 1 == "O" || board(player_choice) - 1 == "X"){
+            // else if(player_choice - 1 == "O" || player_choice - 1 == "X"){
             //     println!("pick again...");
             //     continue;
 
             // }
 
             //updating de board
-            CheckWin();
-            CheckDraw();
+            //CheckWin();
+            //CheckDraw();
             break;
         }
     }
 
-    //switching de player
-    println!("player 2 turn");
-    while (true) {
-        println!("pick a spot on the de board u goober: ");
+fn CheckWin(b: & [char; 9], p: char) -> bool {
+    //all horizontal wins
+    (b[0]==p)
 
-        //updating board again
-        CheckWin();
-        CheckDraw();
-        break;
-    }
+    //all veritcal wins
+
+
+    //all diagonal wins
+
 }
 
-fn DrawBoard() {}
-
-fn CheckWin() {}
-
 fn CheckDraw() {
+    
+    println!("TIE GAME.. BAAAAANG");
     ResetGame();
 }
 
