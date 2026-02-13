@@ -1,15 +1,15 @@
 use std::io;
-use std::string;
 
 fn main() {
     let mut board = [' '; 9];
     let mut player = 'X';
+    let mut moves = 0;
 
     clearscreen::clear().expect("failureeeee");
     println!("TIC... TAC... TOE... rust edition");
     println!("Player 1: X and Player 2: O");
 
-    loop{
+    loop {
         //drawing board
         println!(" {} | {} | {} ", board[0], board[1], board[2]);
         println!("-----------");
@@ -18,57 +18,63 @@ fn main() {
         println!(" {} | {} | {} ", board[6], board[7], board[8]);
 
         //getting user input and validating
-            println!("Pick spot 1-9 to make ya move ya goober: ");
-            let mut input = String::new();
-            io::stdin().read_line(&mut input).expect("failureeeee");
+        println!("{}, Pick spot 1-9 to make ya move ya goober: ", player);
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+        let player_choice: usize = input.trim().parse().unwrap_or(0); //.unwrap like .expect?
 
-            let player_choice: i32 = input.trim().parse().expect("failureeee");
+        if player_choice >= 1 && player_choice <= 9 && board[player_choice - 1] == ' ' {
+            board[player_choice - 1] = player;
+            moves += 1;
+        } else if player_choice > 9 || player_choice < 1 {
+            println!("u stupid... try again");
+            continue;
+        } else if board[player_choice - 1] == 'X' || board[player_choice - 1] == 'O' {
+            println!("what u doing... that spot has already been taken... try again");
+            continue;
+        }
 
-            if (player_choice > 9) {
-                println!("u stupid... try again");
-                continue;
-            }
-            // else if(player_choice - 1 == "O" || player_choice - 1 == "X"){
-            //     println!("pick again...");
-            //     continue;
-
-            // }
-
-            //updating de board
-            CheckWin(&board, player);
-            //CheckDraw();
+        if check_win(&board, player) {
+            println!("game... over....");
+            reset_game();
+            break;
+        }else if moves == 9{
+            println!("TIE GAME... BAAAANG");
+            reset_game();
             break;
         }
+
+        player = if player == 'X' { 'O' } else { 'X' };
     }
+}
 
-fn CheckWin(b: & [char; 9], p: char) -> bool {
+fn check_win(b: &[char; 9], p: char) -> bool {
     //all horizontal wins
-    (b[0]==p)
-
-    //all veritcal wins
-
-
+    (b[0] == p && b[1] == p && b[2] == p) || 
+    (b[3] == p && b[4] == p && b[5] == p) || 
+    (b[6] == p && b[7] == p && b[8] == p) ||
+    //all vertical wins
+    (b[0] == p && b[3] == p && b[6] == p) || 
+    (b[1] == p && b[4] == p && b[7] == p) || 
+    (b[2] == p && b[5] == p && b[8] == p) || 
     //all diagonal wins
-
+    (b[0] == p && b[4] == p && b[8] == p) || 
+    (b[2] == p && b[4] == p && b[6] == p)
 }
+//tried to do a check_draw, couldn't wrap my head around it fully :(
 
-fn CheckDraw() {
-    
-    println!("TIE GAME.. BAAAAANG");
-    ResetGame();
-}
-
-fn ResetGame() {
+fn reset_game() {
     println!("ggs. wanna run it back? (Y/N): ");
     let mut response = String::new();
     io::stdin().read_line(&mut response).expect("failureeeee");
+    let trimmed_response = response.trim(); //trimming necessary so input can be read????
 
-    if (response == "Y" || response == "Y") {
+    if trimmed_response == "Y" || trimmed_response == "y" {
         println!("good luck we're running it again");
         main();
-    } else if (response == "N" || response == "N") {
+    } else if trimmed_response == "N" || trimmed_response == "n" {
         println!("okie... byeeeeee")
     } else {
-        println!("idk wtf u entered but um... bye bye")
+        println!("bye bye");
     }
 }
